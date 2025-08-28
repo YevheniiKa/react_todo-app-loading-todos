@@ -21,9 +21,7 @@ function request<T>(
   if (data) {
     // We add body and Content-Type only for the requests with data
     options.body = JSON.stringify(data);
-    options.headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    options.headers = { 'Content-Type': 'application/json; charset=UTF-8' };
   }
 
   // DON'T change the delay it is required for tests
@@ -42,5 +40,5 @@ export const client = {
   get: <T>(url: string) => request<T>(url),
   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  delete: <T>(url: string) => request<T>(url, 'DELETE'),
 };
