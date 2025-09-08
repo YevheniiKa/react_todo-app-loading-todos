@@ -1,24 +1,23 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
-
-export const USER_ID = 3439;
+import { USER_ID } from '../utils/preferences';
 
 export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-export const createTodo = ({ title, completed, userId }: Omit<Todo, 'id'>) => {
-  return client.post<Todo>(`/todos`, { title, completed, userId });
-};
+export function deleteTodo(id: number) {
+  return client.delete(`/todos/${id}`);
+}
 
-export const updateTodo = ({ title, completed, userId, id }: Todo) => {
-  if (!id) {
-    throw new Error('Todo id is required');
-  }
+export function createTodo(title: string) {
+  return client.post<Todo>(`/todos`, {
+    title,
+    completed: false,
+    userId: USER_ID,
+  });
+}
 
-  return client.patch<Todo>(`/todos/${id}`, { title, completed, userId });
-};
-
-export const deleteTodo = (todoId: number) => {
-  return client.delete<number>(`/todos/${todoId}`);
-};
+export function updateTodo({ id, ...todoData }: Todo) {
+  return client.patch<Todo>(`/todos/${id}`, todoData);
+}
